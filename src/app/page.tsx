@@ -10,6 +10,25 @@ export default function Home() {
     "idle",
   );
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Fallback to ensure loading screen goes away
+    const timer = setTimeout(() => setIsLoaded(true), 3000);
+
+    const handleLoad = () => setIsLoaded(true);
+
+    if (document.readyState === "complete") {
+      setIsLoaded(true);
+    } else {
+      window.addEventListener("load", handleLoad);
+    }
+
+    return () => {
+      window.removeEventListener("load", handleLoad);
+      clearTimeout(timer);
+    };
+  }, []);
 
   // Simple parallax effect for the hero text
   useEffect(() => {
@@ -70,6 +89,15 @@ export default function Home() {
 
   return (
     <div className="bg-white w-full overflow-x-hidden font-sans selection:bg-pink-500 selection:text-white">
+      {/* Loading Screen */}
+      <div
+        className={`fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-1000 ${
+          isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+      >
+        <img src="/e0.png" alt="Edit0 Logo" className="w-16 h-16 opacity-80" />
+      </div>
+
       {/* --- HERO SECTION --- */}
       <div className="relative h-screen w-full overflow-hidden bg-black">
         {/* Stock Video Background (Studio/Film vibe) */}
@@ -79,27 +107,28 @@ export default function Home() {
           muted
           loop
           playsInline
+          poster="/Poster.png"
+          onLoadedData={() => setIsLoaded(true)}
         >
-          <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-set-of-lights-in-a-television-studio-41062-large.mp4"
-            type="video/mp4"
-          />
+          <source src="/Stock.webm" type="video/webm" />
         </video>
 
         {/* Gradient Overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
 
         {/* Pill Navigation (Top Center) */}
         <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white/90 backdrop-blur-xl px-1.5 py-1.5 rounded-full flex items-center gap-1 shadow-2xl border border-white/20 transition-all hover:scale-105 hover:bg-white">
           <div className="px-5 py-2 rounded-full bg-transparent text-sm font-bold tracking-tight text-black cursor-default">
             Edit0
           </div>
+          <a href="https://www.youtube.com/watch?v=BpK0e2AXPV0&pp=0gcJCU0KAYcqIYzv" target="_blank">
           <button
             type="button"
-            className="px-6 py-2 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors flex items-center gap-2"
+            className="cursor-pointer px-6 py-2 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors flex items-center gap-2"
           >
             View Demo
           </button>
+          </a>
         </nav>
 
         {/* Hero Typography (Bottom Left) */}
@@ -130,12 +159,14 @@ export default function Home() {
             <p className="text-xl text-white/70 max-w-2xl mb-12">
               The project is currently in alpha testing phase. Fill the form to become a beta tester.
             </p>
+            <a href="https://www.youtube.com/watch?v=BpK0e2AXPV0&pp=0gcJCU0KAYcqIYzv" target="_blank">
             <button
               type="button"
-              className="bg-white text-black px-10 py-5 rounded-full text-lg font-bold hover:bg-gray-100 hover:scale-105 transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+              className="cursor-pointer bg-white text-black px-10 py-5 rounded-full text-lg font-bold hover:bg-gray-100 hover:scale-105 transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)]"
             >
               Watch the Demo
             </button>
+            </a>
           </div>
 
           <form
@@ -159,7 +190,7 @@ export default function Home() {
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="rounded-full bg-pink-500 text-black px-8 py-4 font-semibold hover:bg-pink-400 transition-colors disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-full bg-cyan-500 text-black px-8 py-4 font-semibold cursor-pointer hover:bg-cyan-300 transition-colors disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {status === "loading" ? "Submitting..." : "Join Beta"}
               </button>
