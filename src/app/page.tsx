@@ -11,6 +11,9 @@ export default function Home() {
   );
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  
+  // Base path for GitHub Pages deployment
+  const BASE_PATH = "/edit0-landing";
 
   useEffect(() => {
     // Fallback to ensure loading screen goes away
@@ -95,7 +98,7 @@ export default function Home() {
           isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
-        <img src="/e0.png" alt="Edit0 Logo" className="w-16 h-16 opacity-80" />
+        <img src={`${BASE_PATH}/e0.png`} alt="Edit0 Logo" className="w-16 h-16 opacity-80" />
       </div>
 
       {/* --- HERO SECTION --- */}
@@ -107,10 +110,10 @@ export default function Home() {
           muted
           loop
           playsInline
-          poster="/Poster.png"
+          poster={`${BASE_PATH}/Poster.png`}
           onLoadedData={() => setIsLoaded(true)}
         >
-          <source src="/Stock.webm" type="video/webm" />
+          <source src={`${BASE_PATH}/Stock.webm`} type="video/webm" />
         </video>
 
         {/* Gradient Overlay for text readability */}
